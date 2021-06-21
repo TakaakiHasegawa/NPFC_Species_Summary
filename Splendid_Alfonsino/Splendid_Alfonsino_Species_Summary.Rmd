@@ -1,12 +1,14 @@
 ---
 title: "Splendid Alfonsino Species Summary"
-author: "NPFC Splendid Alfonsino Small Working Group"
+author: "NPFC Bottom Fisheries Small Working Group"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
+  df_print: default
 always_allow_html: yes
 ---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 options(tinytex.verbose = TRUE)
@@ -27,13 +29,13 @@ library(GLDEX)
 
 # Splendid Alfonsino (*Beryx splendens*)
 
-**Common names:** (Chinese); (English); Splendid Alfonsino (Japanese);  (Korean); (Russian)
+**Common names:** (Chinese); (English); Splendid Alfonsino (Japanese); (Korean); (Russian)
 
 ## Biological Information
 
 Global distribution ranges from tropical to temperate oceans. Historical catch records in the Emperor Seamount suggest the distribution from Nintoku (45 °N) to Hancock (30 °N). Settlement occurs following a certain period of the pelagic life stage. Adults show a vertical distribution from 200 to 800 m with diel vertical migration, feeding on crustaceans, cephalopods, and fish during the night. Limited information is available for recruitment and reproduction processes in the Emperor Seamounts, whereas the population in the Japanese coast shows 4--5 years to sexually mature and spawning occurs during summer.
 
-```{r picture, fig.cap="**Figure 1 Photographs of Beryx splendens.**A) postlarva, B) juvenile, C) young, D) adult (from Watari et al. 2016)", echo=FALSE}
+```{r picture, fig.cap="**Figure 1: Photographs of Beryx splendens.**A) postlarva, B) juvenile, C) young, D) adult (from Watari et al. 2016)", , out.width="70%", out.height="70%", fig.align='center', echo=FALSE}
 
 knitr::include_graphics("Figures/Splendid_Alfonsino.jpg")
 
@@ -41,8 +43,8 @@ knitr::include_graphics("Figures/Splendid_Alfonsino.jpg")
 
 ```{r MapTheDistribution,message=FALSE,warning=FALSE,results="hide", echo=FALSE}
 #IMPORT DISTRIBUTION POINTS (THESE ARE A PLACEHOLDER FROM AQUAMAPS)
-download.file("https://www.aquamaps.org/CSV/1623909682.csv", destfile="Splendid_Alfonsino_Distribution.csv",mode="wb", quiet = FALSE)
-dist_points<-read.csv("Splendid_Alfonsino_Distribution.csv",skip=7,header=TRUE)
+download.file("https://www.aquamaps.org/CSV/1623909682.csv", destfile="SA_Distribution.csv",mode="wb", quiet = FALSE)
+dist_points<-read.csv("SA_Distribution.csv",skip=7,header=TRUE)
 data1<-data.frame(Lon=dist_points$Center.Long,Lat=dist_points$Center.Lat)
 
 #IMPORT THE BASEMAP AND TRANSFORM TO A NICER PROJECTION FOR THE NORTH PACIFIC
@@ -75,14 +77,14 @@ p<-ggplot()+
   theme_dark()+xlab("Longitude")+ylab("Latitude")+
   scale_x_continuous(breaks = seq(130,240,10)) +
   theme(panel.grid = element_blank())
-png("Figures/Splendid_Alfonsino_DistributionMap.png",height=6,width=6,unit="in",res=300)
+png("Figures/SA_DistributionMap.png",height=6,width=6,unit="in",res=300)
 print(p)
 dev.off()
 ```
 
-```{r picture2, fig.cap="**Figure 2 Known distribution of Beryx splendens.**Points indicate observation data from original sources (AquaMaps 2019, October)", echo=FALSE}
+```{r picture2, fig.cap="**Figure 2: Known distribution of Beryx splendens.**Points indicate observation data from original sources (AquaMaps 2019, October)", out.width="70%", out.height="70%", fig.align='center', echo=FALSE}
 
-knitr::include_graphics("Figures/Splendid_Alfonsino_DistributionMap.png")
+knitr::include_graphics("Figures/SA_DistributionMap.png")
 ```
 
 ## Fishery
@@ -119,7 +121,7 @@ catch<-rbind(FAO_catch,NPFC_catch)
 catch$Member<-factor(catch$Member,levels=c("FAO - historical","Korea","Japan","Russia"))
 
 p1<-ggplot(catch)+geom_bar(aes(x=Year,y=Catch,fill=Member),stat="identity",position="stack")+
-  ggtitle("Splendid Alfonsino")+ylab("Catch")+xlab("") + scale_x_continuous(breaks = seq(min(catch$Year,na.rm=TRUE),max(catch$Year,na.rm=TRUE),10))+
+  ylab("Catch (tons)")+xlab("") + scale_x_continuous(breaks = seq(min(catch$Year,na.rm=TRUE),max(catch$Year,na.rm=TRUE),10))+
   scale_y_continuous(expand=c(0,0))+scale_fill_brewer(palette="Set1")+
        theme_bw() +
      theme(axis.line = element_line(colour = "black"),
@@ -129,14 +131,14 @@ p1<-ggplot(catch)+geom_bar(aes(x=Year,y=Catch,fill=Member),stat="identity",posit
            panel.background = element_blank(),
            legend.justification="center")
 
-png("Figures/Splendid_Alfonsino_Catch.png",width=6, height=6,units="in",res=300)
+png("Figures/SA_Catch.png",width=6, height=6,units="in",res=300)
 print(p1)
 dev.off()
 ```
 
-```{r picture3, fig.cap="**Figure 3 Catch trends of splendid alfonsino and North Pacific armorhead (Sawada et al. 2018).** The annual amounts of catch for alfonsino by each Member are shown by the bar plot. The total catch of North Pacific armorhead is also shown as a black line for reference. Note that the amounts of alfonsino and of armorhead are drawn with different scales and that misreporting was found in trawl data, which are currently being reviewed", echo=FALSE}
+```{r picture3, fig.cap="**Figure 3: Catch trends of splendid alfonsino over the past two decades.** The annual amounts of catch for alfonsino by each Member are shown by the bar plot.", out.width="70%", out.height="70%", fig.align='center', echo=FALSE}
 
-knitr::include_graphics("Figures/Splendid_Alfonsino_Catch.png")
+knitr::include_graphics("Figures/SA_Catch.png")
 
 ```
 
@@ -144,13 +146,7 @@ Since the discovery of large populations of North Pacific Armorhead (NPA) in the
 
 Historical catch record (Figure 3) shows the highest catch proportion by Japan, followed by Korea and Russia. Russia terminated their fishery nearly a decade ago. Fishing pressure somewhat reflects the recruitment condition of NPA. In 2010 and 2012, when high recruitment of NPA occurred, the annual catch decreased below 1,000 tons, whereas it increased up to 4,000 tons ever since then.
 
-Size composition analysis from the catch data by Japanese trawlers (Figure 4) suggests the substantial decrease in size of fish in catches over the past decade, raising the concern about recruitment overfishing.
-
-```{r picture4, fig.cap="Figure 4 Histograms of splendid alfonsino size by year (trawl). The histograms of fork length, sampled from the catch by Japanese trawlers and measured by the scientific observers.", echo=FALSE}
-
-knitr::include_graphics("Figures/Figure3.png")
-
-```
+Size composition analysis from the catch data by Japanese trawlers suggests the substantial decrease in size of fish in catches over the past decade, raising the concern about recruitment overfishing.
 
 ```{r effort data,message=FALSE,warning=FALSE,results="hide", echo=FALSE}
 NPFC_effort<-data.frame(read_xlsx("SA_catch.xlsx",sheet="Vessel Summary",skip=28,col_types='numeric')) %>% 
@@ -161,7 +157,7 @@ NPFC_effort<-data.frame(pivot_longer(NPFC_effort,Japan:Russia,names_to="Member",
   select(-(Japan...2:Russia...10))
 
 p1<-ggplot(NPFC_effort)+geom_bar(aes(x=Year,y=Effort,fill=Member),stat="identity",position="stack")+
-  ggtitle("Splendid Alfonsino")+ylab("Effort (Days fished)")+xlab("") + scale_x_continuous(breaks = seq(2001,max(NPFC_effort$Year),5))+
+  ylab("Effort (Days fished)")+xlab("") + scale_x_continuous(breaks = seq(2001,max(NPFC_effort$Year),5))+
   scale_y_continuous(expand=c(0,0))+scale_fill_brewer(palette="Dark2")+
        theme_bw() +
      theme(axis.line = element_line(colour = "black"),
@@ -169,26 +165,25 @@ p1<-ggplot(NPFC_effort)+geom_bar(aes(x=Year,y=Effort,fill=Member),stat="identity
            panel.grid.minor = element_blank(),
            panel.border = element_blank(),
            panel.background = element_blank(),
-           legend.position="bottom")
+           legend.position="center")
 
-png("Figures/Splendid_Alfonsino_Effort.png",width=6, height=6,units="in",res=300)
+png("Figures/SA_Effort.png",width=6, height=6,units="in",res=300)
 p1
 dev.off()
 
 
 ```
 
-[insert text here]
 
-```{r picture1, fig.cap="**Figure 4. Historical fishing effort for Splendid Alfonsino.**", echo=FALSE}
+```{r picture1, fig.cap="**Figure 4. Historical fishing effort for Splendid Alfonsino.**", out.width="70%", out.height="70%", fig.align='center', echo=FALSE}
 
-knitr::include_graphics("Figures/Splendid_Alfonsino_Effort.png")
+knitr::include_graphics("Figures/SA_Effort.png")
 
 ```
 
 ## Assessment
 
-There ar no biomass estimates available for SA in NPFC waters.
+There are no biomass estimates available for SA in NPFC waters.
 
 An age- or length-structured stock assessment may be feasible given the life history SA (citation for more information). Surplus production models developed by Japan in 2008 showed that the average fishing mortality is 20--28 % higher than the MSY level. This analysis, however, remains unreliable as the estimated CPUE is biased due to target shifts between NPA and SA and the estimated intrinsic population growth rate parameter was too high for long-lived deep-sea fish.
 
@@ -196,46 +191,47 @@ Data limited approaches, such as YPR or SPR analysis that do not require detaile
 
 ## Management
 
-*Active Management Measure(s)*
+**Active Management Measures**
 
 The following NPFMC conservation and management measures pertain to this species:
 
-CMM 2019-05 For Bottom Fisheries and Protection of VMEs in the NW Pacific Ocean
+- CMM 2019-05 For Bottom Fisheries and Protection of VMEs in the NW Pacific Ocean
 
-CMM 2019-06 For Bottom Fisheries and Protection of VMEs in the NE Pacific Ocean
+- CMM 2019-06 For Bottom Fisheries and Protection of VMEs in the NE Pacific Ocean
 
 Available from <https://www.npfc.int/active-conservation-and-management-measures>
 
-*Management Summary*
 
-```{r manaagment table,message=FALSE,warning=FALSE,results="hide", echo=FALSE}
+```{r manaagment table,message=FALSE,warning=FALSE, echo=FALSE}
 tabledat<-data.frame("Convention or Management Principle"=c("Biological reference point(s)", "Stock status","Catch limit","Harvest control rule", "Other"), Status=c(1,0,2,1,2),"Comment or Consideration"=c("Not established","Status determination criteria not established","Recommended catch, effort limits","Not established","No expansion of fishing beyond established areas"))
 
 hcolor<-c("gray","red","yellow","green")
-```
 
-```{r maketable,echo=FALSE}
-tabledat%>%kbl(col.names=c("Convention or Management Principle","Status","Comment or Consideration"))%>%kable_classic_2(full_width=F)%>%
-    column_spec(2, color = hcolor[tabledat$Status+1],
-              background = hcolor[tabledat$Status+1])%>%
-  footnote("$\textcolor{green}{OK}$, $\textcolor{yellow}{Intermediate}$, $\textcolor{red}{Not accomplished}$, $\textcolor{gray}{Unknown}$", title_format="bold",escape = F)
-    
-    
+tabledat%>%kbl(col.names=c("Convention or Management Principle","Status","Comment or Consideration"), caption = "Management Summary")%>%
+  kable_classic_2(full_width=F)%>%
+  column_spec(2, color = hcolor[tabledat$Status+1],
+              background = hcolor[tabledat$Status+1]) %>% 
+  row_spec(0, bold = T) %>% 
+  footnote("\\\\textcolor{green}{OK}, \\\\textcolor{yellow}{Intermediate}, \\\\textcolor{red}{Not accomplished}, \\\\textcolor{gray}{Unknown}", title_format="bold", escape = FALSE)
 ```
 
 Currently, there is no accepted harvest control for this species.
 
-In 2016, theinterim management measures were implemented, which includes limiting the fishing effort to the 2007's catch level, prohibiting fisheries from November to December (which corresponds to the spawning season for NPA) and not allowing fisheries in C-H Seamount and the southeastern part of Koko Seamount (for the protection of VMEs).
+In 2016, the interim management measures were implemented, which includes limiting the fishing effort to the 2007's catch level, prohibiting fisheries from November to December (which corresponds to the spawning season for NPA) and not allowing fisheries in C-H Seamount and the southeastern part of Koko Seamount (for the protection of VMEs).
 
-In 2019, an adaptive management plan was additionally adopted, which includes the regulation of the mesh size (trawl: > 10 cm, gillnet: 12 cm) to protect juvenile fish. Still, this measure is insufficient as the substantial catch of young fish has been reported by trawlers even after being implemented.
+In 2019, an adaptive management plan was additionally adopted, which includes the regulation of the mesh size (trawl: \> 10 cm, gillnet: 12 cm) to protect juvenile fish. Still, this measure is insufficient as the substantial catch of young fish has been reported by trawlers even after being implemented.
 
 ## Data
 
-[insert data table here]
+```{r data table, echo=FALSE}
+options(knitr.kable.NA = '')
 
-## Special Comments
+data.frame(read_xlsx("SA_Species_Summary_Data.xlsx")) %>% 
+  kbl(col.names = c("Data type", "Source", "Years available", "Comment"), caption = "Data Summary", ) %>% 
+  kable_classic_2(full_width=F) %>% 
+  row_spec(0, bold = T)
+```
 
-[insert text here]
 
 ## References
 
