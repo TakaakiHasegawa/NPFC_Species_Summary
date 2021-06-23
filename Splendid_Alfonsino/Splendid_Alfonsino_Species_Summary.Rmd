@@ -1,15 +1,13 @@
 ---
 title: "Splendid Alfonsino Species Summary"
-author: "NPFC Bottom Fisheries Small Working Group"
-date: "`r Sys.Date()`"
+author: "*NPFC Bottom Fisheries Small Working Group*"
+date: "*`r Sys.Date()`*"
 output:
-  html_document:
-    toc: true
-    theme: journal
-    number_sections: true
+  prettydoc::html_pretty:
+    theme: architect
+    highlight: github
   pdf_document:
-    toc: true
-    number_sections: true
+    default
   df_print: default
 always_allow_html: yes
 ---
@@ -35,7 +33,7 @@ library(sf)
 library(readxl)
 library(kableExtra)
 library(GLDEX)
-
+library(RColorBrewer)
 ```
 
 # Splendid Alfonsino (*Beryx splendens*)
@@ -46,7 +44,7 @@ library(GLDEX)
 
 Global distribution ranges from tropical to temperate oceans. Historical catch records in the Emperor Seamount suggest the distribution from Nintoku (45 °N) to Hancock (30 °N). Settlement occurs following a certain period of the pelagic life stage. Adults show a vertical distribution from 200 to 800 m with diel vertical migration, feeding on crustaceans, cephalopods, and fish during the night. Limited information is available for recruitment and reproduction processes in the Emperor Seamounts, whereas the population in the Japanese coast shows 4--5 years to sexually mature and spawning occurs during summer.
 
-```{r picture, fig.cap="**Figure 1: Photographs of Beryx splendens.**A) postlarva, B) juvenile, C) young, D) adult (from Watari et al. 2016)", , out.width="70%", out.height="70%", fig.align='center', echo=FALSE}
+```{r picture, fig.cap="**Figure 1: Photographs of Beryx splendens.** <br>A) postlarva, B) juvenile, C) young, D) adult (from Watari et al. 2016)</br>", out.width="70%", out.height="70%", fig.align='center', echo=FALSE}
 
 knitr::include_graphics("Figures/Splendid_Alfonsino.jpg")
 
@@ -68,7 +66,7 @@ data1$LonP<-data2[,1]
 data1$LatP<-data2[,2]
 
 #MAKE A SET OF BOUNDARIES TO USE AS THE PLOTTING RANGE (LIMITS ON LONGITUDE AND LATITUDE)
-data3<-data.frame(cbind(c(130,235),c(62,10)))
+data3<-data.frame(cbind(c(130,225),c(62,10)))
 data3<-proj4::project(data3,"+proj=merc +lon_0=150 +k=1 +x_0=0 +y_0=0 +datum=WGS84 +units=m +no_defs")
 
 #PLOT THE ENTIRE SET WITH THE MAP AS THE BACKGROUND
@@ -86,14 +84,17 @@ p<-ggplot()+
   
   # formatting
   theme_dark()+xlab("Longitude")+ylab("Latitude")+
-  scale_x_continuous(breaks = seq(130,240,10)) +
-  theme(panel.grid = element_blank())
-png("Figures/SA_DistributionMap.png",height=6,width=6,unit="in",res=300)
+  scale_x_continuous(breaks = seq(130,230,10)) +
+  theme(axis.title = element_text(size = 18),
+        axis.text.x = element_text(size = 12),
+        axis.text.y = element_text(size = 12),
+        panel.grid = element_blank())
+png("Figures/SA_DistributionMap.png",height=6,width=9,unit="in",res=300)
 print(p)
 dev.off()
 ```
 
-```{r picture2, fig.cap="**Figure 2: Known distribution of Beryx splendens.**Points indicate observation data from original sources (AquaMaps 2019, October)", out.width="70%", out.height="70%", fig.align='center', echo=FALSE}
+```{r picture2, fig.cap="**Figure 2: Known distribution of Beryx splendens.** <br>Points indicate observation data from original sources (AquaMaps 2019, October)</br>", out.width="80%", out.height="80%", fig.align='center', echo=FALSE}
 
 knitr::include_graphics("Figures/SA_DistributionMap.png")
 ```
@@ -135,19 +136,25 @@ p1<-ggplot(catch)+geom_bar(aes(x=Year,y=Catch,fill=Member),stat="identity",posit
   ylab("Catch (tons)")+xlab("") + scale_x_continuous(breaks = seq(min(catch$Year,na.rm=TRUE),max(catch$Year,na.rm=TRUE),10))+
   scale_y_continuous(expand=c(0,0))+scale_fill_brewer(palette="Set1")+
        theme_bw() +
-     theme(axis.line = element_line(colour = "black"),
+     theme(axis.title = element_text(size = 18),
+           axis.text.x = element_text(size = 12),
+           axis.text.y = element_text(size = 12),
+           axis.line = element_line(colour = "black"),
            panel.grid.major = element_blank(),
            panel.grid.minor = element_blank(),
            panel.border = element_blank(),
            panel.background = element_blank(),
-           legend.justification="center")
+           legend.justification="center",
+           legend.key.size = unit(0.8, "cm"),
+           legend.title = element_text(size = 15),
+           legend.text = element_text(size = 12))
 
-png("Figures/SA_Catch.png",width=6, height=6,units="in",res=300)
+png("Figures/SA_Catch.png",width=9, height=6,units="in",res=300)
 print(p1)
 dev.off()
 ```
 
-```{r picture3, fig.cap="**Figure 3: Catch trends of splendid alfonsino over the past two decades.** The annual amounts of catch for alfonsino by each Member are shown by the bar plot.", out.width="70%", out.height="70%", fig.align='center', echo=FALSE}
+```{r picture3, fig.cap="**Figure 3: Catch trends of splendid alfonsino over the past two decades.** The annual amounts of catch for alfonsino by each Member are shown by the bar plot.", out.width="80%", out.height="80%", fig.align='center', echo=FALSE}
 
 knitr::include_graphics("Figures/SA_Catch.png")
 
@@ -176,13 +183,11 @@ p1<-ggplot(NPFC_effort)+geom_bar(aes(x=Year,y=Effort,fill=Member),stat="identity
            panel.grid.minor = element_blank(),
            panel.border = element_blank(),
            panel.background = element_blank(),
-           legend.position="center")
+           legend.position="right")
 
-png("Figures/SA_Effort.png",width=6, height=6,units="in",res=300)
+png("Figures/SA_Effort.png",width=9, height=6,units="in",res=300)
 p1
 dev.off()
-
-
 ```
 
 
@@ -214,25 +219,23 @@ Available from <https://www.npfc.int/active-conservation-and-management-measures
 
 
 ```{r manaagment table,message=FALSE,warning=FALSE, results='asis', echo=FALSE}
-MngmtTable<-data.frame("Convention or Management Principle"=c("Biological reference point(s)", "Stock status","Catch limit","Harvest control rule", "Other"), Status=c(1,0,2,1,2),"Comment or Consideration"=c("Not established","Status determination criteria not established","Recommended catch, effort limits","Not established","No expansion of fishing beyond established areas"))
+MngmtTable<-data.frame(
+  row.names = c("Biological reference points", "Stock status","Catch limit","Harvest control rule", "Other"), 
+  Status = c("Not accomplished", "Unknown", "Intermediate", "Not accomplished", "Intermediate"),
+  Comment = c("Not established","Status determination criteria not established","Recommended catch, effort limits","Not established","No expansion of fishing beyond established areas"))
 
-hcolor<-c("gray","red","yellow","green")
+cols <- brewer.pal(9, "Set1")
 
-MngmtTable <- MngmtTable %>% 
-  kbl(col.names=c("Convention or Management Principle","Status","Comment or Consideration"), caption = "Management Summary", escape = FALSE)%>%
-  kable_classic_2(full_width=F)%>%
-  column_spec(2, color = hcolor[tabledat$Status+1],
-              background = hcolor[tabledat$Status+1]) %>% 
-  row_spec(0, bold = T)
-
-MngmtTable_html <-MngmtTable %>% 
-  footnote(general = "<span style='color: green;'>OK</span>, <span style='color: yellow;'>Intermediate</span>, <span style='color: red;'>Not accomplished</span>, <span style='color: gray;'>Unknown</span>", escape = F)
-MngmtTable_pdf <- MngmtTable %>% 
-  footnote("\\textcolor{green}{OK}, \\textcolor{yellow}{Intermediate}, \\textcolor{red}{Not accomplished}, \\textcolor{gray}{Unknown}", title_format="bold", escape = F)
-
-switch(out_type,
-       html = MngmtTable_html,
-       latex = MngmtTable_pdf)
+switch (out_type,
+  html = MngmtTable %>% 
+    kable(caption = '<font size= "5">Management Summary</font>')%>% 
+    kable_paper(full_width=F)%>%
+    row_spec(0, bold = T, color = "white")%>% 
+    column_spec(1, bold = T) %>% 
+    column_spec(2, background = c(cols[1], cols[9], cols[5], cols[1], cols[5]), color = "white") %>% 
+    kable_styling(font_size = 18, bootstrap_options = c("basic", "striped")
+))
+ 
 ```
 
 Currently, there is no accepted harvest control for this species.
@@ -241,15 +244,21 @@ In 2016, the interim management measures were implemented, which includes limiti
 
 In 2019, an adaptive management plan was additionally adopted, which includes the regulation of the mesh size (trawl: \> 10 cm, gillnet: 12 cm) to protect juvenile fish. Still, this measure is insufficient as the substantial catch of young fish has been reported by trawlers even after being implemented.
 
-## Data
+## Data Summary
 
 ```{r data table, echo=FALSE}
 options(knitr.kable.NA = '')
 
-data.frame(read_xlsx("SA_Species_Summary_Data.xlsx")) %>% 
-  kbl(col.names = c("Data type", "Source", "Years available", "Comment"), caption = "Data Summary", ) %>% 
-  kable_classic_2(full_width=F) %>% 
-  row_spec(0, bold = T)
+DataTable <-data.frame(read_xlsx("SA_Species_Summary_Data.xlsx"))
+
+switch (out_type,
+  html = DataTable %>% 
+    kbl(col.names = c("Data type", "Source", "Years available", "Comment"))%>% 
+  kable_paper(full_width=F) %>% 
+    row_spec(0, bold = T, color = "white") %>% 
+    column_spec(3, width = "15em") %>% 
+    kable_styling(font_size = 15, bootstrap_options = c("basic", "striped"))
+)
 ```
 
 
@@ -259,6 +268,6 @@ AquaMaps 2019, October (add citation for map here)
 
 FAO. (2016). Global review of Alfonsino (Beryx spp.) their fisheries, biology, and management. In *Food and Agriculture Organization of the United Nations* (Vol. 1084, Issue 1084). <http://www.fao.org/3/a-i5336e.pdf>
 
-Sawada, K., Nishida, K., Yonezaki, S., Kiyota, M., & Review, M. (2018). *Review of biology and fisheries of splendid alfonsino Beryx splendens , especially in the Emperor seamounts area by April 2018 This paper may be cited in the following manner : NPFC-2018-SSC BF01-WP03 Review of biology and fisheries of splendid alfonsino*.
+Sawada, K., Nishida, K., Yonezaki, S., Kiyota, M., & Review, M. (2018). *Review of biology and fisheries of splendid alfonsino Beryx splendens , especially in the Emperor seamounts area by April 2018 This paper may be cited in the following manner: NPFC-2018-SSC BF01-WP03 Review of biology and fisheries of splendid alfonsino*.
 
 Watari et al. 2016 (add citation information here)
