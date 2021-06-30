@@ -3,11 +3,11 @@ title: "Splendid Alfonsino Species Summary"
 author: "*NPFC Bottom Fisheries Small Working Group*"
 date: "*`r Sys.Date()`*"
 output:
+  pdf_document:
+    default
   prettydoc::html_pretty:
     theme: architect
     highlight: github
-  pdf_document:
-    default
   df_print: default
 always_allow_html: yes
 ---
@@ -46,7 +46,7 @@ Global distribution ranges from tropical to temperate oceans. Historical catch r
 
 ```{r picture, fig.cap="**Figure 1: Photographs of Beryx splendens.** <br>A) postlarva, B) juvenile, C) young, D) adult (from Watari et al. 2016)</br>", out.width="70%", out.height="70%", fig.align='center', echo=FALSE}
 
-knitr::include_graphics("Figures/Splendid_Alfonsino.jpg")
+knitr::include_graphics("Figures/SA.jpg")
 
 ```
 
@@ -100,6 +100,11 @@ knitr::include_graphics("Figures/SA_DistributionMap.png")
 ```
 
 ## Fishery
+Since the discovery of large populations of North Pacific Armorhead (NPA) in the Emperor Seamount in the late 1960s, SA has been exploited as an alternative resource to NPA due to the large temporal fluctuation of the NPA population. The main fishing methods are bottom trawls and gillnets.
+
+Historical catch record (Figure 3) shows the highest catch proportion by Japan, followed by Korea and Russia. Russia terminated their fishery nearly a decade ago. Fishing pressure somewhat reflects the recruitment condition of NPA. In 2010 and 2012, when high recruitment of NPA occurred, the annual catch decreased below 1,000 tons, whereas it increased up to 4,000 tons ever since then.
+
+Size composition analysis from the catch data by Japanese trawlers suggests the substantial decrease in size of fish in catches over the past decade, raising the concern about recruitment overfishing.
 
 ```{r getcatchdata,message=FALSE,warning=FALSE,results="hide", echo=FALSE}
 #FAO Data
@@ -160,11 +165,6 @@ knitr::include_graphics("Figures/SA_Catch.png")
 
 ```
 
-Since the discovery of large populations of North Pacific Armorhead (NPA) in the Emperor Seamount in the late 1960s, SA has been exploited as an alternative resource to NPA due to the large temporal fluctuation of the NPA population. The main fishing methods are bottom trawls and gillnets.
-
-Historical catch record (Figure 3) shows the highest catch proportion by Japan, followed by Korea and Russia. Russia terminated their fishery nearly a decade ago. Fishing pressure somewhat reflects the recruitment condition of NPA. In 2010 and 2012, when high recruitment of NPA occurred, the annual catch decreased below 1,000 tons, whereas it increased up to 4,000 tons ever since then.
-
-Size composition analysis from the catch data by Japanese trawlers suggests the substantial decrease in size of fish in catches over the past decade, raising the concern about recruitment overfishing.
 
 ```{r effort data,message=FALSE,warning=FALSE,results="hide", echo=FALSE}
 NPFC_effort<-data.frame(read_xlsx("SA_catch.xlsx",sheet="Vessel Summary",skip=28,col_types='numeric')) %>% 
